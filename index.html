@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- 在输入文本的过程，页面会自动缩放成2.0，所以这边禁止放大 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+    <title>支撑位与阻力位计算器</title>
+    <style>
+        * { margin: 0; padding: 0; }
+        body { font-family: 'Microsoft Yahei'; }
+        article { margin-bottom: 20px; }
+        h3{ padding:10px 0 0 10px; font-size:14px; }
+        .field,
+        .field-1 { padding: 5px; border: 1px solid #ccc; }
+        .table { border: 1px solid #ccc; border-collapse: collapse; text-align: center; }
+        .table thead th { line-height: 30px; font-weight: normal; border: 1px solid #ccc; background-color: #eee; }
+        .table td { padding: 5px; border: 1px solid #ccc; line-height: 30px; font-size: 12px; }
+        .container { padding: 10px; }
+        .bgc-eee { background-color: #eee; }
+
+        #result,
+        #result_1 { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <!-- 支撑与阻力 -->
+    <article>
+        <h3>支撑位与阻力位计算</h3>
+        <div class="container">
+            <div class="input-area">
+                <input type="text" id="p1" placeholder="起始价格" class="field">
+                <input type="text" id="p2" placeholder="结束价格" class="field">
+            </div>
+            <div id="result"></div>
+        </div>
+        <script type="text/template" id="template">
+            {{var diffValue=it.finish-it.begin;}}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>类型</th>
+                {{~it.priceList :p:i}}
+            <th>{{=p.name}}</th>
+                {{~}}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="bgc-eee">压力位(上行）</td>
+                {{~it.priceList :p:i}}
+            <td>{{=(it.begin + p.value * diffValue).toFixed(2)}}</td>
+                {{~}}
+            </tr>
+            <tr>
+                <td class="bgc-eee">支撑位（下行）</td>
+                {{~it.priceList :p:i}}
+            <td>{{=(it.finish - p.value * diffValue).toFixed(2)}}</td>
+                {{~}}
+            </tr>
+        </tbody>
+    </table>
+    <!-- 区间幅度百分比计算 -->
+    <div>
+        区间幅度百分比：
+        {{=(diffValue*100 / it.begin).toFixed(2)+'%'}}
+    </div>
+        </script>
+    </article>
+
+    <!-- 点位计算 -->
+    <article>
+        <h3>点位对照表计算</h3>
+        <div class="container">
+            <div class="input-area">
+                <input type="text" id="p3" placeholder="上一交易日收盘价" class="field-1" />
+            </div>
+            <div id="result_1"></div>
+        </div>
+        <script type="text/template" id="template_1">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>点位</th>
+                        {{~it.priceList :p:i}}
+            <th>{{=p.name}}</th>
+                        {{~}}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="bgc-eee">结果</td>
+                        {{~it.priceList :p:i}}
+            <td>{{=(it.begin + p.value * it.begin).toFixed(2)}}</td>
+                        {{~}}
+                    </tr>
+                </tbody>
+            </table>
+        </script>
+    </article>
+
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="js.js"></script>
+    <script src="bundles.js"></script>
+</body>
+</html>
